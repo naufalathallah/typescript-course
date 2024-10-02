@@ -5,6 +5,7 @@ import Header from "./components/Header";
 import { useState } from "react";
 import CourseGoalList from "./components/CourseGoalList";
 import NewGoal from "./components/NewGoal";
+import Input from "./components/input";
 
 export type CourseGoal = {
   title: string;
@@ -37,6 +38,10 @@ function App() {
       </Header>
       <NewGoal onAddGoal={handleAddGoal} />
       <CourseGoalList goals={goals} onDelete={handleDeleteGoal} />
+
+      {/* section lanjutan */}
+      <Input id="name" label="Your Name" />
+      <Input id="age" label=" Your Age" />
     </main>
   );
 }
