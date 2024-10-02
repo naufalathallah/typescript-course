@@ -11,8 +11,8 @@ export type CourseGoal = {
 function App() {
   return (
     <main>
-      <Input id="name" label="Your Name" />
-      <Input id="age" label=" Your Age" />
+      <Input id="name" label="Your Name" type="text" />
+      <Input id="age" label=" Your Age" type="number" />
     </main>
   );
 }
