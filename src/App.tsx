@@ -1,13 +1,6 @@
 import "./App.css";
 import Button from "./components/Button";
-import CourseGoal from "./components/CourseGoal";
 import Input from "./components/input";
-
-export type CourseGoal = {
-  title: string;
-  description: string;
-  id: number;
-};
 
 function App() {
   return (
