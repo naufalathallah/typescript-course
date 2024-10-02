@@ -15,12 +15,10 @@ function App() {
       <Input id="name" label="Your Name" type="text" />
       <Input id="age" label=" Your Age" type="number" />
       <p>
-        <Button el="button">A Button</Button>
+        <Button>A Button</Button>
       </p>
       <p>
-        <Button el="anchor" href="https://google.com">
-          An Anchor
-        </Button>
+        <Button href="https://google.com">An Anchor</Button>
       </p>
     </main>
   );
