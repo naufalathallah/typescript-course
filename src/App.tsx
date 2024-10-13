@@ -2,30 +2,43 @@ import { ReactNode, useEffect, useState } from "react";
 import { get } from "./util/http.ts";
 import BlogPosts, { BlogPost } from "./components/BlogPosts.tsx";
 import fetchingImg from "./assets/data-fetching.png";
+import { z } from "zod";
 
-type RawDataBlogPost = {
-  id: number;
-  userId: number;
-  title: string;
-  body: string;
-};
+const rawDataBlogPostSchema = z.object({
+  id: z.number(),
+  userId: z.number(),
+  title: z.string(),
+  body: z.string(),
+});
+
+const expectedResponseDataSchema = z.array(rawDataBlogPostSchema);
 
 function App() {
-  const [fetchedPosts, setFetchedPosts] = useState<BlogPost[]>();
+  const [fetchedPosts, setFetchedPosts] = useState<BlogPost[]>([]);
+  const [isFetching, setIsFetching] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchPosts() {
-      const data = (await get("https://jsonplaceholder.typicode.com/posts")) as RawDataBlogPost[];
+      setIsFetching(true);
+      try {
+        const data = await get("https://jsonplaceholder.typicode.com/posts");
+        const parsedData = expectedResponseDataSchema.parse(data);
+        const blogPosts: BlogPost[] = parsedData.map((rawPost) => {
+          return {
+            id: rawPost.id,
+            title: rawPost.title,
+            text: rawPost.body,
+          };
+        });
+        setFetchedPosts(blogPosts);
+      } catch (error) {
+        if (error instanceof Error) {
+          setError(error.message);
+        }
+      }
 
-      const blogPosts: BlogPost[] = data.map((rawPost) => {
-        return {
-          id: rawPost.id,
-          titlle: rawPost.title,
-          text: rawPost.body,
-        };
-      });
-
-      setFetchedPosts(blogPosts);
+      setIsFetching(false);
     }
 
     fetchPosts();
@@ -33,8 +46,14 @@ function App() {
 
   let content: ReactNode;
 
-  if (fetchedPosts) {
+  if (isFetching) {
+    content = <p>Loading...</p>;
+  } else if (error) {
+    content = <p>Error: {error}</p>;
+  } else if (fetchedPosts.length > 0) {
     content = <BlogPosts posts={fetchedPosts} />;
+  } else {
+    content = <p>No posts found</p>;
   }
 
   return (
