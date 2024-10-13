@@ -47,7 +47,7 @@ function App() {
   let content: ReactNode;
 
   if (isFetching) {
-    content = <p>Loading...</p>;
+    content = <p id="loading-fallback">Loading...</p>;
   } else if (error) {
     content = <p>Error: {error}</p>;
   } else if (fetchedPosts.length > 0) {
